@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Big Big Bowl · 英式中餐</title>
+  <!-- Font Awesome 图标库 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts 字体 -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    /* ----- 全局变量 & 重置 ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #b84eff;      /* 霓虹紫/粉 */
+      --primary-dark: #9b2fd9;
+      --secondary: #4ad4ff;    /* 亮蓝/青 */
+      --secondary-dark: #2aa6d9;
+      --bg-dark: #0f0b1a;
+      --bg-card: #1a1428;
+      --bg-light: #f5f0ff;
+      --text-light: #f0eaff;
+      --text-muted: #b7a8d4;
+      --white: #ffffff;
+      --shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --transition: 0.3s ease;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ----- 语言切换（右上角） ----- */
+    .lang-switch {
+      position: fixed;
+      top: 18px;
+      right: 24px;
+      z-index: 999;
+      background: rgba(15, 11, 26, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(184, 78, 255, 0.4);
+      border-radius: 40px;
+      padding: 4px;
+      display: flex;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    .lang-switch button {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    .lang-switch button.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 0 16px rgba(184, 78, 255, 0.6);
+    }
+
+    /* ----- 导航 / Header ----- */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 16px 0;
+      background: rgba(15, 11, 26, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(184, 78, 255, 0.2);
+      z-index: 900;
+      transition: var(--transition);
+    }
+
+    .navbar .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a {
+      position: relative;
+      transition: var(--transition);
+      color: var(--text-muted);
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition);
+      border-radius: 4px;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* 移动端导航按钮 */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-light);
+      font-size: 1.6rem;
+      cursor: pointer;
+    }
+
+    /* ----- Hero 区 ----- */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: radial-gradient(circle at 30% 40%, rgba(184, 78, 255, 0.25) 0%, transparent 55%),
+                  radial-gradient(circle at 80% 70%, rgba(74, 212, 255, 0.2) 0%, transparent 50%),
+                  var(--bg-dark);
+      padding: 120px 24px 80px;
+      overflow: hidden;
+    }
+
+    /* 装饰光斑 */
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(184, 78, 255, 0.15) 0%, transparent 70%);
+      top: -100px;
+      left: -100px;
+      border-radius: 50%;
+      filter: blur(60px);
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(74, 212, 255, 0.1) 0%, transparent 70%);
+      bottom: -200px;
+      right: -150px;
+      border-radius: 50%;
+      filter: blur(80px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 40px;
+      background: rgba(184, 78, 255, 0.15);
+      border: 1px solid rgba(184, 78, 255, 0.4);
+      color: var(--secondary);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 12vw, 6rem);
+      font-weight: 800;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #ffffff 20%, var(--secondary) 50%, var(--primary) 90%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 40px rgba(184, 78, 255, 0.4);
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 550px;
+      margin: 0 auto;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 34px;
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #fff;
+      box-shadow: 0 8px 30px rgba(184, 78, 255, 0.45);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(184, 78, 255, 0.65);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--secondary);
+      border: 2px solid var(--secondary);
+    }
+
+    .btn-outline:hover {
+      background: rgba(74, 212, 255, 0.1);
+      transform: translateY(-3px);
+      box-shadow: 0 0 30px rgba(74, 212, 255, 0.3);
+    }
+
+    /* ----- 通用 Section ----- */
+    section {
+      padding: 90px 0;
+    }
+
+    .section-title {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-align: center;
+      background: linear-gradient(135deg, #fff, var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+      font-size: 1.05rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ----- 菜单分类 & 菜品 ----- */
+    .menu-categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+
+    .cat-btn {
+      padding: 10px 24px;
+      border-radius: 40px;
+      background: var(--bg-card);
+      border: 1px solid rgba(184, 78, 255, 0.25);
+      color: var(--text-muted);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.9rem;
+      font-family: inherit;
+    }
+
+    .cat-btn:hover,
+    .cat-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 0 24px rgba(184, 78, 255, 0.4);
+    }
+
+    /* 菜单折叠面板 */
+    .menu-accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .menu-group {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      border: 1px solid rgba(184, 78, 255, 0.2);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .menu-group-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 28px;
+      cursor: pointer;
+      background: rgba(184, 78, 255, 0.06);
+      transition: var(--transition);
+      user-select: none;
+    }
+
+    .menu-group-header:hover {
+      background: rgba(184, 78, 255, 0.12);
+    }
+
+    .menu-group-header h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--secondary);
+    }
+
+    .menu-group-header h3 i {
+      font-size: 0.9rem;
+      color: var(--primary);
+      transition: transform 0.3s ease;
+    }
+
+    .menu-group-header .arrow {
+      color: var(--text-muted);
+      transition: transform 0.3s ease;
+      font-size: 1.1rem;
+    }
+
+    .menu-group.open .menu-group-header .arrow {
+      transform: rotate(180deg);
+    }
+
+    .menu-group-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+      padding: 0 28px;
+      background: rgba(15, 11, 26, 0.5);
+    }
+
+    .menu-group.open .menu-group-body {
+      max-height: 3000px;
+      padding: 20px 28px 28px;
+    }
+
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(184, 78, 255, 0.12);
+      gap: 16px;
+    }
+
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+
+    .item-info {
+      flex: 1;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .item-code {
+      font-size: 0.75rem;
+      color: var(--primary);
+      font-weight: 600;
+      background: rgba(184, 78, 255, 0.15);
+      padding: 2px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .item-name-zh {
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: var(--text-light);
+    }
+
+    .item-name-en {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .item-price {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--secondary);
+      white-space: nowrap;
+      letter-spacing: 0.5px;
+    }
+
+    /* ----- 关于品牌 ----- */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .about-text h2 {
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #fff, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .about-text p {
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      font-size: 1.05rem;
+    }
+
+    .about-highlights {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+    }
+
+    .highlight-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    .highlight-item i {
+      font-size: 1.2rem;
+      color: var(--primary);
+    }
+
+    .about-visual {
+      background: linear-gradient(135deg, rgba(184, 78, 255, 0.2), rgba(74, 212, 255, 0.1));
+      border-radius: var(--radius);
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      border: 1px solid rgba(184, 78, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-visual span {
+      filter: drop-shadow(0 0 30px rgba(184, 78, 255, 0.6));
+    }
+
+    /* ----- 顾客评价 ----- */
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .review-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 28px;
+      border: 1px solid rgba(184, 78, 255, 0.2);
+      transition: var(--transition);
+    }
+
+    .review-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(184, 78, 255, 0.5);
+      box-shadow: 0 12px 40px rgba(184, 78, 255, 0.15);
+    }
+
+    .review-stars {
+      color: #ffc107;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+
+    .review-text {
+      color: var(--text-muted);
+      font-style: italic;
+      margin-bottom: 16px;
+      font-size: 0.98rem;
+      line-height: 1.7;
+    }
+
+    .review-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .review-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    .review-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .review-date {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ----- 地图 & 社交链接 ----- */
+    .map-social {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .map-wrap {
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid rgba(184, 78, 255, 0.2);
+      background: var(--bg-card);
+      min-height: 320px;
+    }
+
+    .map-wrap iframe {
+      width: 100%;
+      height: 320px;
+      border: none;
+      filter: invert(90%) hue-rotate(180deg) contrast(1.2);
+    }
+
+    .social-wrap h3 {
+      font-size: 1.6rem;
+      margin-bottom: 16px;
+      color: var(--secondary);
+    }
+
+    .social-wrap p {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .social-link {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 1px solid rgba(184, 78, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: var(--text-muted);
+      transition: var(--transition);
+    }
+
+    .social-link:hover {
+      background: var(--primary);
+      color: #fff;
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(184, 78, 255, 0.5);
+    }
+
+    /* ----- 页脚 ----- */
+    footer {
+      text-align: center;
+      padding: 40px 24px;
+      border-top: 1px solid rgba(184, 78, 255, 0.15);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* ----- 响应式 ----- */
+    @media (max-width: 900px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .map-social {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .navbar .container {
+        position: relative;
+      }
+
+      /* 移动端导航展开 */
+      .nav-links.mobile-open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(15, 11, 26, 0.98);
+        backdrop-filter: blur(20px);
+        padding: 24px;
+        gap: 18px;
+        border-bottom: 1px solid rgba(184, 78, 255, 0.3);
+      }
+
+      .hero h1 {
+        font-size: 3rem;
+      }
+
+      .section-title {
+        font-size: 1.9rem;
+      }
+
+      .menu-group-header {
+        padding: 18px 20px;
+      }
+
+      .menu-group-header h3 {
+        font-size: 1.15rem;
+      }
+
+      .menu-group-body {
+        padding: 0 20px;
+      }
+
+      .menu-group.open .menu-group-body {
+        padding: 16px 20px 24px;
+      }
+
+      .menu-item {
+        flex-wrap: wrap;
+      }
+
+      .lang-switch {
+        top: 12px;
+        right: 12px;
+      }
+
+      .lang-switch button {
+        padding: 6px 14px;
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 2.4rem;
+      }
+
+      .btn {
+        padding: 14px 24px;
+        font-size: 0.95rem;
+      }
+
+      .item-name-zh {
+        font-size: 0.95rem;
+      }
+
+      .item-name-en {
+        font-size: 0.8rem;
+      }
+    }
+
+    /* 小提示：折叠动画平滑 */
+    .menu-group-body {
+      will-change: max-height;
+    }
+
+    /* 滚动条美化 */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-dark);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== 语言切换 ========== -->
+  <div class="lang-switch">
+    <button id="langZh" class="active" onclick="setLanguage('zh')">中文</button>
+    <button id="langEn" onclick="setLanguage('en')">EN</button>
+  </div>
+
+  <!-- ========== 导航栏 ========== -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="logo">Big Big Bowl</div>
+      <div class="nav-links" id="navLinks">
+        <a href="#hero" data-key="nav_home">首页</a>
+        <a href="#menu" data-key="nav_menu">菜单</a>
+        <a href="#about" data-key="nav_about">关于</a>
+        <a href="#reviews" data-key="nav_reviews">评价</a>
+        <a href="#contact" data-key="nav_contact">联系</a>
+      </div>
+      <button class="menu-toggle" onclick="toggleMobileNav()" aria-label="菜单">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========== Hero 区 ========== -->
+  <section id="hero" class="hero">
+    <div class="hero-content">
+      <span class="hero-badge" data-key="hero_badge">英式中餐 · 地道风味</span>
+      <h1>Big Big Bowl</h1>
+      <p data-key="hero_desc">传统英式中餐，融合东方韵味与本地口味，每一碗都盛满诚意。</p>
+      <div class="hero-buttons">
+        <a href="https://2126.merchant.onestepeat.co.uk" target="_blank" class="btn btn-primary">
+          <i class="fas fa-utensils"></i>
+          <span data-key="hero_order">立即点餐</span>
+        </a>
+        <a href="#menu" class="btn btn-outline">
+          <i class="fas fa-book-open"></i>
+          <span data-key="hero_menu">浏览菜单</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 菜单展示区 ========== -->
+  <section id="menu">
+    <div class="container">
+      <h2 class="section-title" data-key="menu_title">精选菜单</h2>
+      <p class="section-subtitle" data-key="menu_subtitle">点击分类展开查看菜品，支持中英文切换。</p>
+
+      <!-- 分类筛选按钮 -->
+      <div class="menu-categories" id="categoryFilters">
+        <!-- JS 动态生成 -->
+      </div>
+
+      <!-- 菜单折叠列表 -->
+      <div class="menu-accordion" id="menuAccordion">
+        <!-- JS 动态生成 -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 关于品牌 ========== -->
+  <section id="about" style="background: linear-gradient(180deg, var(--bg-dark) 0%, #14101f 100%);">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <h2 data-key="about_title">关于 Big Big Bowl</h2>
+          <p data-key="about_p1">Big Big Bowl 是一家专注于英式中餐的餐厅，我们将传统中式烹饪技法与英国本地食材巧妙结合，创造出独特而亲切的味道。</p>
+          <p data-key="about_p2">从经典的咖喱、炒面到香酥鸭，每一道菜都经过精心烹制。我们的目标很简单：用大碗盛满美味，让每一位顾客都能感受到家的温暖。</p>
+          <div class="about-highlights">
+            <div class="highlight-item"><i class="fas fa-check-circle"></i><span data-key="about_h1">新鲜食材</span></div>
+            <div class="highlight-item"><i class="fas fa-check-circle"></i><span data-key="about_h2">地道风味</span></div>
+            <div class="highlight-item"><i class="fas fa-check-circle"></i><span data-key="about_h3">快速服务</span></div>
+          </div>
+        </div>
+        <div class="about-visual">
+          <span>🥡</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 顾客评价 ========== -->
+  <section id="reviews" style="background: linear-gradient(180deg, #14101f 0%, var(--bg-dark) 100%);">
+    <div class="container">
+      <h2 class="section-title" data-key="reviews_title">顾客评价</h2>
+      <p class="section-subtitle" data-key="reviews_subtitle">听听我们的客人怎么说。</p>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="review-text" data-key="review1_text">“咖喱鸡非常正宗，分量十足，价格也很合理。一定会再来的！”</p>
+          <div class="review-author">
+            <div class="review-avatar">L</div>
+            <div><div class="review-name">Lisa M.</div><div class="review-date">2024-12-10</div></div>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+          <p class="review-text" data-key="review2_text">“香酥鸭和炒面都很好吃，配送速度也很快，推荐！”</p>
+          <div class="review-author">
+            <div class="review-avatar">J</div>
+            <div><div class="review-name">James T.</div><div class="review-date">2024-11-28</div></div>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+          <p class="review-text" data-key="review3_text">“员工非常友好，餐厅氛围温馨。大碗炒饭是必点！”</p>
+          <div class="review-author">
+            <div class="review-avatar">S</div>
+            <div><div class="review-name">Sarah K.</div><div class="review-date">2024-10-15</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 地图 & 社交链接 ========== -->
+  <section id="contact">
+    <div class="container">
+      <h2 class="section-title" data-key="contact_title">找到我们</h2>
+      <div class="map-social">
+        <div class="map-wrap">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2483.072185764701!2d-0.1277583!3d51.5073509!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487604b900d26973%3A0x4291f3172409ea92!2sLondon!5e0!3m2!1sen!2suk!4v1700000000000" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+        <div class="social-wrap">
+          <h3 data-key="social_title">关注我们</h3>
+          <p data-key="social_desc">获取最新优惠和菜品资讯，欢迎在社交平台与我们互动。</p>
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 页脚 ========== -->
+  <footer>
+    <div class="container">
+      <p>© 2025 Big Big Bowl · 英式中餐 · 保留所有权利</p>
+    </div>
+  </footer>
+
+  <!-- ========== JavaScript ========== -->
+  <script>
+    // ---------- 1. 菜单数据（来自上传的 Excel 文件 LD1124 - 副本.xlsx） ----------
+    const menuData = [
+      // 头盘, APPETISER
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "1", zh: "海鲜饼", en: "Seafood Pancake", price: "8.9" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "1", zh: "炸云吞(10)", en: "Crispy Fried Won Ton (10)", price: "6" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "2", zh: "虾多士(8)", en: "Prawn on Toast (8)", price: "6.5" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "3", zh: "鸭卷(5)", en: "Duck Rolls (5)", price: "5.7" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "4", zh: "大春卷(2)", en: "Large Spring Roll (2)", price: "5" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "5", zh: "斋卷", en: "Vegetarian Pancake Rolls", price: "4" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "6", zh: "小春卷(5)", en: "Mini Spring Roll (5)", price: "4.5" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "7", zh: "幸运饼", en: "Fortune Cookie", price: "0.3" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "8", zh: "虾片", en: "Prawn Crackers", price: "2.5" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "9", zh: "椒盐鸡翅", en: "Salt & Pepper Chicken Wings", price: "6.7" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "10", zh: "京鸡翅", en: "Capital Chicken Wings", price: "6.7" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "11", zh: "BBQ鸡翅", en: "Barbecued Chicken Wings", price: "6.7" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "12", zh: "BBQ干骨", en: "Barbecued Spare Ribs (Dry)", price: "7.7" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "13", zh: "蜜骨", en: "Spare Ribs in Honey", price: "7.7" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "14", zh: "BBQ汁骨", en: "Spare Ribs in Barbecued Sauce", price: "7.7" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "15", zh: "京骨", en: "Capital Spare Ribs", price: "7.7" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "16", zh: "古老汁骨", en: "Spare Ribs in Sweet & Sour Sauce", price: "7.7" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "17", zh: "椒盐骨", en: "Spare Ribs in Salt & Pepper", price: "7.7" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "18", zh: "OK汁骨", en: "Spare Ribs in OK Sauce", price: "7.7" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "19", zh: "海草", en: "Seaweed", price: "5.7" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "20", zh: "沙爹鸡串(4)", en: "Satay Chicken on Skewer (4)", price: "6.8" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "21", zh: "洋葱圈(8)", en: "Deep Fried Onion Ring (8)", price: "5" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "22", zh: "椒盐条", en: "Salt & Pepper Chips", price: "5.5" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "23", zh: "蟹钳(5)", en: "Deep Fried Crab Claw (5)", price: "4.8" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "24", zh: "咖喱角(10)", en: "Curry Samosa (10)", price: "4.5" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "25", zh: "香酥鸭", en: "Crispy Aromatic Duck", price: "12" },
+      { category: "头盘,APPETISER", categoryEn: "Appetiser", code: "26", zh: "拼盘", en: "Combination Starter", price: "14.5" },
+      // 汤, SOUP
+      { category: "汤,SOUP", categoryEn: "Soup", code: "27", zh: "鸡米汤", en: "Chicken & Sweetcorn Soup", price: "4.5" },
+      { category: "汤,SOUP", categoryEn: "Soup", code: "28", zh: "鸡面汤", en: "Chicken & Noodle Soup", price: "4.5" },
+      { category: "汤,SOUP", categoryEn: "Soup", code: "29", zh: "蟹汤", en: "Crabmeat Soup", price: "4.5" },
+      { category: "汤,SOUP", categoryEn: "Soup", code: "30", zh: "酸辣汤", en: "Hot & Sour Soup", price: "4.7" },
+      { category: "汤,SOUP", categoryEn: "Soup", code: "31", zh: "云吞汤", en: "Won Ton Soup", price: "4.7" },
+      // 咖喱, CURRY DISHES
+      { category: "咖喱,CURRY DISHES", categoryEn: "Curry Dishes", code: "32", zh: "特色咖喱", en: "Special Curry", price: "7.6" },
+      { category: "咖喱,CURRY DISHES", categoryEn: "Curry Dishes", code: "33", zh: "咖喱大虾", en: "King Prawn Curry", price: "7.6" },
+      { category: "咖喱,CURRY DISHES", categoryEn: "Curry Dishes", code: "34", zh: "咖喱虾仔", en: "Shrimp Curry", price: "7.5" },
+      { category: "咖喱,CURRY DISHES", categoryEn: "Curry Dishes", code: "35", zh: "咖喱鸡", en: "Chicken Curry", price: "7.5" },
+      { category: "咖喱,CURRY DISHES", categoryEn: "Curry Dishes", code: "36", zh: "咖喱牛", en: "Beef Curry", price: "7.5" },
+      { category: "咖喱,CURRY DISHES", categoryEn: "Curry Dishes", code: "37", zh: "咖喱叉烧", en: "Roast Pork Curry", price: "7.4" },
+      { category: "咖喱,CURRY DISHES", categoryEn: "Curry Dishes", code: "38", zh: "咖喱毛菇", en: "Mushroom Curry", price: "7" },
+      { category: "咖喱,CURRY DISHES", categoryEn: "Curry Dishes", code: "39", zh: "咖喱杂菜", en: "Mixed Vegetable Curry", price: "7" },
+      // 饭, RICE DISHES (Large)
+      { category: "饭,RICE DISHES(Large)", categoryEn: "Rice Dishes (Large)", code: "55", zh: "招牌炒饭", en: "House Special Fried Rice", price: "7.5" },
+      { category: "饭,RICE DISHES(Large)", categoryEn: "Rice Dishes (Large)", code: "56", zh: "羊饭", en: "Special Fried Rice", price: "7.5" },
+      { category: "饭,RICE DISHES(Large)", categoryEn: "Rice Dishes (Large)", code: "57", zh: "星炒饭", en: "Singapore Fried Rice", price: "7.4" },
+      { category: "饭,RICE DISHES(Large)", categoryEn: "Rice Dishes (Large)", code: "58", zh: "泰炒饭", en: "Thai Fried Rice", price: "7.3" },
+      { category: "饭,RICE DISHES(Large)", categoryEn: "Rice Dishes (Large)", code: "59", zh: "鸭炒饭", en: "Roast Duck Fried Rice", price: "7.5" },
+      { category: "饭,RICE DISHES(Large)", categoryEn: "Rice Dishes (Large)", code: "60", zh: "大虾炒饭", en: "King Prawn Fried Rice", price: "7.5" },
+      { category: "饭,RICE DISHES(Large)", categoryEn: "Rice Dishes (Large)", code: "61", zh: "扬州炒饭", en: "Young Chow Fried Rice", price: "7.3" },
+      { category: "饭,RICE DISHES(Large)", categoryEn: "Rice Dishes (Large)", code: "62", zh: "鸡炒饭", en: "Chicken Fried Rice", price: "7.4" },
+      { category: "饭,RICE DISHES(Large)", categoryEn: "Rice Dishes (Large)", code: "63", zh: "牛炒饭", en: "Beef Fried Rice", price: "7.4" },
+      { category: "饭,RICE DISHES(Large)", categoryEn: "Rice Dishes (Large)", code: "64", zh: "叉烧炒饭", en: "Roast Pork Fried Rice", price: "7.3" },
+      { category: "饭,RICE DISHES(Large)", categoryEn: "Rice Dishes (Large)", code: "65", zh: "虾仔炒饭", en: "Shrimp Fried Rice", price: "7.3" },
+      { category: "饭,RICE DISHES(Large)", categoryEn: "Rice Dishes (Large)", code: "66", zh: "火腿炒饭", en: "Ham Fried Rice", price: "7.2" },
+      { category: "饭,RICE DISHES(Large)", categoryEn: "Rice Dishes (Large)", code: "67", zh: "毛菇炒饭", en: "Mushroom Fried Rice", price: "7.2" },
+      { category: "饭,RICE DISHES(Large)", categoryEn: "Rice Dishes (Large)", code: "68", zh: "起司蛋炒饭(S)", en: "Cheese & Egg Fried Rice(Small)", price: "4.8" },
+      { category: "饭,RICE DISHES(Large)", categoryEn: "Rice Dishes (Large)", code: "69", zh: "蛋炒饭(S)", en: "Egg Fried Rice (Small)", price: "3.8" },
+      { category: "饭,RICE DISHES(Large)", categoryEn: "Rice Dishes (Large)", code: "70", zh: "白饭(S)", en: "Plain Boiled Rice (Small)", price: "3.6" },
+      // 炒面, CHOW MEIN DISHES (Large)
+      { category: "炒面,CHOW MEIN DISHES(Large)", categoryEn: "Chow Mein Dishes (Large)", code: "71", zh: "羊面", en: "Special Chow Mein", price: "7.5" },
+      { category: "炒面,CHOW MEIN DISHES(Large)", categoryEn: "Chow Mein Dishes (Large)", code: "72", zh: "星炒面", en: "Singapore Chow Mein", price: "7.4" },
+      { category: "炒面,CHOW MEIN DISHES(Large)", categoryEn: "Chow Mein Dishes (Large)", code: "73", zh: "泰炒面", en: "Thai Chow Mein", price: "7.3" },
+      { category: "炒面,CHOW MEIN DISHES(Large)", categoryEn: "Chow Mein Dishes (Large)", code: "74", zh: "大虾炒面", en: "King Prawn Chow Mein", price: "7.5" },
+      { category: "炒面,CHOW MEIN DISHES(Large)", categoryEn: "Chow Mein Dishes (Large)", code: "75", zh: "鸭炒面", en: "Roast Duck Chow Mein", price: "7.5" },
+      { category: "炒面,CHOW MEIN DISHES(Large)", categoryEn: "Chow Mein Dishes (Large)", code: "76", zh: "鸡炒面", en: "Chicken Chow Mein", price: "7.4" },
+      { category: "炒面,CHOW MEIN DISHES(Large)", categoryEn: "Chow Mein Dishes (Large)", code: "77", zh: "牛炒面", en: "Beef Chow Mein", price: "7.4" },
+      { category: "炒面,CHOW MEIN DISHES(Large)", categoryEn: "Chow Mein Dishes (Large)", code: "78", zh: "叉烧炒面", en: "Roast Pork Chow Mein", price: "7.3" },
+      { category: "炒面,CHOW MEIN DISHES(Large)", categoryEn: "Chow Mein Dishes (Large)", code: "79", zh: "毛菇炒面", en: "Mushroom Chow Mein", price: "7.2" },
+      { category: "炒面,CHOW MEIN DISHES(Large)", categoryEn: "Chow Mein Dishes (Large)", code: "80", zh: "杂菜炒面", en: "Mixed Vegetable Chow Mein", price: "7.2" },
+      { category: "炒面,CHOW MEIN DISHES(Large)", categoryEn: "Chow Mein Dishes (Large)", code: "81", zh: "虾仔炒面", en: "Shrimp Chow Mein", price: "7.4" },
+      { category: "炒面,CHOW MEIN DISHES(Large)", categoryEn: "Chow Mein Dishes (Large)", code: "82", zh: "净炒面(S)", en: "Plain Chow Mein(Small)", price: "5.5" },
+      { category: "炒面,CHOW MEIN DISHES(Large)", categoryEn: "Chow Mein Dishes (Large)", code: "82", zh: "净面(S)", en: "Plain Noodle(Small)", price: "5.5" },
+      { category: "炒面,CHOW MEIN DISHES(Large)", categoryEn: "Chow Mein Dishes (Large)", code: "83", zh: "芽菜炒面(S)", en: "Beansprouts Chow Mein (Small)", price: "5.5" },
+      { category: "炒面,CHOW MEIN DISHES(Large)", categoryEn: "Chow Mein Dishes (Large)", code: "84", zh: "星米粉", en: "Singapore Style Fried Rice Vermicelli", price: "7.4" },
+      // 细面, CHINESE THIN NOODLES
+      { category: "细面,CHINESE THIN NOODLES", categoryEn: "Chinese Thin Noodles", code: "91", zh: "特色细面", en: "Special Chinese Thin Noodles", price: "7.6" },
+      { category: "细面,CHINESE THIN NOODLES", categoryEn: "Chinese Thin Noodles", code: "92", zh: "大虾细面", en: "King Prawn Chinese Thin Noodles", price: "7.6" },
+      { category: "细面,CHINESE THIN NOODLES", categoryEn: "Chinese Thin Noodles", code: "93", zh: "鸭细面", en: "Roast Duck Chinese Thin Noodles", price: "7.6" },
+      { category: "细面,CHINESE THIN NOODLES", categoryEn: "Chinese Thin Noodles", code: "94", zh: "鸡细面", en: "Chicken Chinese Thin Noodles", price: "7.5" },
+      { category: "细面,CHINESE THIN NOODLES", categoryEn: "Chinese Thin Noodles", code: "95", zh: "牛细面", en: "Beef Chinese Thin Noodles", price: "7.5" },
+      // 鸡, Chicken
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "96", zh: "沙爹鸡", en: "Chicken with Satay Sauce", price: "7.6" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "97", zh: "四川鸡", en: "Chicken with Szechuan Style", price: "7.5" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "98", zh: "腰果鸡", en: "Chicken with Cashew Nuts", price: "7.6" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "99", zh: "宫保鸡", en: "Kung Po Chicken", price: "7.5" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "100", zh: "姜葱鸡", en: "Chicken with Ginger & Spring Onion", price: "7.5" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "101", zh: "蚝汁鸡", en: "Chicken with Oyster Sauce", price: "7.5" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "102", zh: "士召鸡", en: "Chicken with Green Pepper in Black Bean Sauce", price: "7.5" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "103", zh: "毛菇鸡", en: "Chicken with Mushroom", price: "7.5" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "104", zh: "杂菜鸡", en: "Chicken with Mixed Vegetable", price: "7.5" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "105", zh: "毛菇鸡", en: "Chicken with Mixed Mushroom", price: "7.5" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "106", zh: "西兰花鸡", en: "Chicken with Fresh Broccoli", price: "7.5" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "107", zh: "泰甜辣鸡", en: "Chicken with Thai Sweet Chilli Sauce (Batter)", price: "7.6" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "108", zh: "黑椒鸡", en: "Chicken with Black Pepper Sauce", price: "7.5" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "109", zh: "OK鸡", en: "Chicken with OK Sauce (Batter)", price: "7.6" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "110", zh: "菠萝鸡", en: "Chicken with Pineapple", price: "7.5" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "111", zh: "番茄鸡", en: "Chicken with Tomatoes", price: "7.5" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "112", zh: "蒜辣鸡", en: "Chicken with Garlic & Chilli", price: "7.5" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "113", zh: "什水鸡", en: "Chicken Chop Suey", price: "7.5" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "114", zh: "广式鸡", en: "Chicken in Cantonese Style (Batter)", price: "7.6" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "115", zh: "竹马鸡", en: "Chicken with Bamboo Shoot & Water Chestnuts", price: "7.5" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "116", zh: "中式鸡", en: "Chicken in Chinese Style", price: "7.5" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "117", zh: "泰甜辣鸡丝", en: "Shredded Chicken in Thai Sweet Chilli Sauce", price: "7.6" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "118", zh: "椒盐鸡丝", en: "Shredded Chicken with Salt & Pepper", price: "7.6" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "119", zh: "京鸡丝", en: "Shredded Chicken in Capital Sauce", price: "7.6" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "120", zh: "黑椒鸡丝", en: "Shredded Chicken in Black Pepper Sauce", price: "7.6" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "121", zh: "OK鸡丝", en: "Shredded Chicken in OK Sauce", price: "7.6" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "122", zh: "古老鸡丝", en: "Shredded Chicken in Sweet & Sour Sauce", price: "7.6" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "123", zh: "辣鸡丝", en: "Spicy Crispy Shredded Chicken", price: "7.6" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "124", zh: "柠汁鸡", en: "Chicken in Lemon Sauce", price: "7.6" },
+      { category: "鸡,Chicken", categoryEn: "Chicken", code: "125", zh: "橙鸡", en: "Chicken in Orange Sauce", price: "7.6" },
+      // 英式, ENGLISH DISHES (Large)
+      { category: "英式,ENGLISH DISHES(Large)", categoryEn: "English Dishes (Large)", code: "209", zh: "特色力", en: "Special Omelette", price: "7.6" },
+      { category: "英式,ENGLISH DISHES(Large)", categoryEn: "English Dishes (Large)", code: "210", zh: "大虾力", en: "King Prawn Omelette", price: "7.6" },
+      { category: "英式,ENGLISH DISHES(Large)", categoryEn: "English Dishes (Large)", code: "211", zh: "虾仔力", en: "Shrimp Omelette", price: "7.4" },
+      { category: "英式,ENGLISH DISHES(Large)", categoryEn: "English Dishes (Large)", code: "212", zh: "鸡力", en: "Chicken Omelette", price: "7.4" },
+      { category: "英式,ENGLISH DISHES(Large)", categoryEn: "English Dishes (Large)", code: "213", zh: "叉烧力", en: "Roast Pork Omelette", price: "7.4" },
+      { category: "英式,ENGLISH DISHES(Large)", categoryEn: "English Dishes (Large)", code: "214", zh: "火腿力", en: "Ham Omelette", price: "7.4" },
+      { category: "英式,ENGLISH DISHES(Large)", categoryEn: "English Dishes (Large)", code: "215", zh: "毛菇力", en: "Mushroom Omelette", price: "7.3" },
+      { category: "英式,ENGLISH DISHES(Large)", categoryEn: "English Dishes (Large)", code: "216", zh: "起司力", en: "Cheese Omelette", price: "7.3" },
+      { category: "英式,ENGLISH DISHES(Large)", categoryEn: "English Dishes (Large)", code: "217", zh: "洋葱鸡，毛菇带烧汁", en: "Roast Chicken with Onions, Mushroom & Gravy", price: "9" },
+      // 其他, EXTRA PORTIONS
+      { category: "其他,EXTRA PORTIONS", categoryEn: "Extra Portions", code: "225", zh: "条", en: "Chips", price: "3.5" },
+      { category: "其他,EXTRA PORTIONS", categoryEn: "Extra Portions", code: "226", zh: "咖喱汁", en: "Curry Sauce", price: "2.5" },
+      { category: "其他,EXTRA PORTIONS", categoryEn: "Extra Portions", code: "227", zh: "古老汁", en: "Sweet & Sour Sauce", price: "2.3" },
+      { category: "其他,EXTRA PORTIONS", categoryEn: "Extra Portions", code: "228", zh: "BBQ汁", en: "Barbecued Sauce", price: "2.3" },
+      { category: "其他,EXTRA PORTIONS", categoryEn: "Extra Portions", code: "229", zh: "烧汁", en: "Gravy Sauce", price: "2.3" },
+      { category: "其他,EXTRA PORTIONS", categoryEn: "Extra Portions", code: "230", zh: "咖喱汁条", en: "Chips with Curry Sauce", price: "5" },
+      { category: "其他,EXTRA PORTIONS", categoryEn: "Extra Portions", code: "231", zh: "烧汁条", en: "Chips with Gravy Sauce", price: "5" },
+      { category: "其他,EXTRA PORTIONS", categoryEn: "Extra Portions", code: "232", zh: "毛菇条，洋葱带烧汁", en: "Chips with Mushroom, Onion & Gravy", price: "5.5" },
+      { category: "其他,EXTRA PORTIONS", categoryEn: "Extra Portions", code: "233", zh: "蛋炒饭带咖喱汁", en: "Egg Fried Rice & Curry Sauce", price: "5" },
+      { category: "其他,EXTRA PORTIONS", categoryEn: "Extra Portions", code: "234", zh: "条，蛋炒饭带咖喱汁", en: "Chips, Egg Fried Rice & Curry Sauce", price: "5.8" },
+      // 素菜, VEGETARIAN DISHES
+      { category: "素菜,VEGETARIAN DISHES", categoryEn: "Vegetarian Dishes", code: "235", zh: "沙爹杂菜", en: "Mixed Vegetable with Satay Sauce", price: "5.8" },
+      { category: "素菜,VEGETARIAN DISHES", categoryEn: "Vegetarian Dishes", code: "236", zh: "四川杂菜", en: "Mixed Vegetable in Szechuan Style", price: "5.7" },
+      { category: "素菜,VEGETARIAN DISHES", categoryEn: "Vegetarian Dishes", code: "237", zh: "腰果杂菜", en: "Mixed Vegetable with Cashew Nuts", price: "5.8" },
+      { category: "素菜,VEGETARIAN DISHES", categoryEn: "Vegetarian Dishes", code: "238", zh: "宫保杂菜", en: "Kung Po Mixed Vegetable", price: "5.5" },
+      { category: "素菜,VEGETARIAN DISHES", categoryEn: "Vegetarian Dishes", code: "239", zh: "蚝汁杂菜", en: "Mixed Vegetable with Oyster Sauce", price: "5.5" },
+      { category: "素菜,VEGETARIAN DISHES", categoryEn: "Vegetarian Dishes", code: "240", zh: "士召杂菜", en: "Mixed Vegetable with Green Pepper in Black Bean Sauce", price: "5.5" },
+      { category: "素菜,VEGETARIAN DISHES", categoryEn: "Vegetarian Dishes", code: "241", zh: "炒毛菇", en: "Fried Mushrooms", price: "5.5" },
+      { category: "素菜,VEGETARIAN DISHES", categoryEn: "Vegetarian Dishes", code: "242", zh: "炒洋葱", en: "Stir Fried Onions", price: "5.5" },
+      { category: "素菜,VEGETARIAN DISHES", categoryEn: "Vegetarian Dishes", code: "243", zh: "炒蚝汁竹马", en: "Stir Fried Water Chestnuts & Bamboo Shoots with Oyster Sauce", price: "5" },
+      { category: "素菜,VEGETARIAN DISHES", categoryEn: "Vegetarian Dishes", code: "244", zh: "炒芽菜", en: "Stir Fried Beansprouts", price: "5" },
+      // 甜品, DESSERTS DISHES
+      { category: "甜品,DESSERTS DISHES", categoryEn: "Desserts", code: "245", zh: "炸蕉", en: "Banana Fritters in Syrup", price: "5" },
+      { category: "甜品,DESSERTS DISHES", categoryEn: "Desserts", code: "246", zh: "炸菠萝", en: "Pineapple Fritters in Syrup", price: "5" },
+      // 饮料, DRINKS
+      { category: "饮料,DRINKS", categoryEn: "Drinks", code: "", zh: "瓶装可乐", en: "Coke Diet Coke (1.5 Ltr)", price: "3.3" },
+      { category: "饮料,DRINKS", categoryEn: "Drinks", code: "", zh: "罐装胡椒先生", en: "Dr Pepper Coke (Can)", price: "1.8" },
+      { category: "饮料,DRINKS", categoryEn: "Drinks", code: "", zh: "罐装可乐", en: "Diet Coke (Can)", price: "1.8" },
+      { category: "饮料,DRINKS", categoryEn: "Drinks", code: "", zh: "罐装芬达", en: "Fanta (Can)", price: "1.8" },
+      { category: "饮料,DRINKS", categoryEn: "Drinks", code: "", zh: "罐装坦格", en: "Tango (Can)", price: "1.8" },
+      { category: "饮料,DRINKS", categoryEn: "Drinks", code: "", zh: "罐装雪碧", en: "Sprite (Can)", price: "1.8" },
+      { category: "饮料,DRINKS", categoryEn: "Drinks", code: "", zh: "罐装百事", en: "Pepsi (Can)", price: "1.8" },
+      // 童餐, KIDS MEAL
+      { category: "童餐,KIDS MEAL", categoryEn: "Kids Meal", code: "", zh: "鸡球(5)，条带咖喱汁", en: "Chicken Balls(5), Chips, Sweet & Sour Sauce", price: "5.5" },
+      { category: "童餐,KIDS MEAL", categoryEn: "Kids Meal", code: "", zh: "鸡块(6)，条带古老汁", en: "Chicken Nuggets(6), Chips, Sweet & Sour Sauce", price: "5.5" },
+      { category: "童餐,KIDS MEAL", categoryEn: "Kids Meal", code: "", zh: "鱼指(6)，条带咖喱汁", en: "Fish Fingers(6), Chips, Sweet & Sour Sauce", price: "5.5" },
+      // 套餐, Special Set Meals
+      { category: "套餐,Special Set Meals", categoryEn: "Special Set Meals", code: "A", zh: "单人餐A", en: "For ONE Person", price: "14" },
+      { category: "套餐,Special Set Meals", categoryEn: "Special Set Meals", code: "B", zh: "双人餐B", en: "For TWO Persons", price: "30" },
+      { category: "套餐,Special Set Meals", categoryEn: "Special Set Meals", code: "C", zh: "三人餐C", en: "For THREE Persons", price: "40" },
+      { category: "套餐,Special Set Meals", categoryEn: "Special Set Meals", code: "D", zh: "四人餐D", en: "For FOUR Persons", price: "47" },
+    ];
+
+    // ---------- 2. 语言包 ----------
+    const i18n = {
+      zh: {
+        nav_home: "首页",
+        nav_menu: "菜单",
+        nav_about: "关于",
+        nav_reviews: "评价",
+        nav_contact: "联系",
+        hero_badge: "英式中餐 · 地道风味",
+        hero_desc: "传统英式中餐，融合东方韵味与本地口味，每一碗都盛满诚意。",
+        hero_order: "立即点餐",
+        hero_menu: "浏览菜单",
+        menu_title: "精选菜单",
+        menu_subtitle: "点击分类展开查看菜品，支持中英文切换。",
+        about_title: "关于 Big Big Bowl",
+        about_p1: "Big Big Bowl 是一家专注于英式中餐的餐厅，我们将传统中式烹饪技法与英国本地食材巧妙结合，创造出独特而亲切的味道。",
+        about_p2: "从经典的咖喱、炒面到香酥鸭，每一道菜都经过精心烹制。我们的目标很简单：用大碗盛满美味，让每一位顾客都能感受到家的温暖。",
+        about_h1: "新鲜食材",
+        about_h2: "地道风味",
+        about_h3: "快速服务",
+        reviews_title: "顾客评价",
+        reviews_subtitle: "听听我们的客人怎么说。",
+        review1_text: "“咖喱鸡非常正宗，分量十足，价格也很合理。一定会再来的！”",
+        review2_text: "“香酥鸭和炒面都很好吃，配送速度也很快，推荐！”",
+        review3_text: "“员工非常友好，餐厅氛围温馨。大碗炒饭是必点！”",
+        contact_title: "找到我们",
+        social_title: "关注我们",
+        social_desc: "获取最新优惠和菜品资讯，欢迎在社交平台与我们互动。",
+        all_categories: "全部",
+      },
+      en: {
+        nav_home: "Home",
+        nav_menu: "Menu",
+        nav_about: "About",
+        nav_reviews: "Reviews",
+        nav_contact: "Contact",
+        hero_badge: "British Chinese · Authentic Taste",
+        hero_desc: "Traditional British Chinese cuisine, blending Eastern flavors with local taste. Every bowl is filled with sincerity.",
+        hero_order: "Order Now",
+        hero_menu: "View Menu",
+        menu_title: "Our Menu",
+        menu_subtitle: "Click on categories to expand dishes. Supports Chinese/English switch.",
+        about_title: "About Big Big Bowl",
+        about_p1: "Big Big Bowl is a restaurant specializing in British Chinese cuisine. We cleverly combine traditional Chinese cooking techniques with local British ingredients to create unique and comforting flavors.",
+        about_p2: "From classic curries and chow mein to crispy aromatic duck, every dish is carefully prepared. Our goal is simple: fill big bowls with deliciousness and let every customer feel at home.",
+        about_h1: "Fresh Ingredients",
+        about_h2: "Authentic Flavors",
+        about_h3: "Fast Service",
+        reviews_title: "Customer Reviews",
+        reviews_subtitle: "Hear what our guests say.",
+        review1_text: "“The chicken curry is very authentic, generous portion, and reasonably priced. Will definitely come back!”",
+        review2_text: "“Crispy duck and chow mein are delicious, and delivery was fast. Highly recommended!”",
+        review3_text: "“Staff are very friendly, cozy atmosphere. The big bowl fried rice is a must-try!”",
+        contact_title: "Find Us",
+        social_title: "Follow Us",
+        social_desc: "Get the latest offers and dish updates. Interact with us on social media.",
+        all_categories: "All",
+      }
+    };
+
+    let currentLang = 'zh'; // 默认中文
+
+    // ---------- 3. 渲染菜单（按分类分组） ----------
+    function renderMenu() {
+      const accordion = document.getElementById('menuAccordion');
+      const filterContainer = document.getElementById('categoryFilters');
+
+      // 获取所有唯一分类（保持原始顺序）
+      const categories = [];
+      const categoryMap = new Map();
+      menuData.forEach(item => {
+        if (!categoryMap.has(item.category)) {
+          categoryMap.set(item.category, {
+            key: item.category,
+            zh: item.category.split(',')[0] || item.category,
+            en: item.categoryEn || item.category,
+          });
+          categories.push(item.category);
+        }
+      });
+
+      // 生成筛选按钮
+      let filterHtml = `<button class="cat-btn active" data-cat="all">${i18n[currentLang].all_categories}</button>`;
+      categories.forEach(cat => {
+        const info = categoryMap.get(cat);
+        const label = currentLang === 'zh' ? info.zh : info.en;
+        filterHtml += `<button class="cat-btn" data-cat="${cat}">${label}</button>`;
+      });
+      filterContainer.innerHTML = filterHtml;
+
+      // 生成折叠面板
+      let accordionHtml = '';
+      categories.forEach(cat => {
+        const info = categoryMap.get(cat);
+        const catLabel = currentLang === 'zh' ? info.zh : info.en;
+        const items = menuData.filter(item => item.category === cat);
+        // 构建菜品列表
+        let itemsHtml = '';
+        items.forEach(item => {
+          const name = currentLang === 'zh' ? item.zh : item.en;
+          // 如果当前语言是中文，英文名作为副标题；反之亦然
+          const subName = currentLang === 'zh' ? item.en : item.zh;
+          const codeHtml = item.code ? `<span class="item-code">${item.code}</span>` : '';
+          itemsHtml += `
+            <div class="menu-item">
+              <div class="item-info">
+                ${codeHtml}
+                <span class="item-name-zh">${name}</span>
+                <span class="item-name-en">${subName}</span>
+              </div>
+              <span class="item-price">£${item.price}</span>
+            </div>
+          `;
+        });
+
+        accordionHtml += `
+          <div class="menu-group" data-category="${cat}">
+            <div class="menu-group-header" onclick="toggleGroup(this)">
+              <h3><i class="fas fa-chevron-right"></i> ${catLabel}</h3>
+              <i class="fas fa-chevron-down arrow"></i>
+            </div>
+            <div class="menu-group-body">
+              ${itemsHtml}
+            </div>
+          </div>
+        `;
+      });
+      accordion.innerHTML = accordionHtml;
+
+      // 绑定筛选事件
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          const cat = this.dataset.cat;
+          document.querySelectorAll('.menu-group').forEach(group => {
+            if (cat === 'all' || group.dataset.category === cat) {
+              group.style.display = 'block';
+            } else {
+              group.style.display = 'none';
+            }
+          });
+        });
+      });
+    }
+
+    // 切换折叠面板
+    function toggleGroup(header) {
+      const group = header.closest('.menu-group');
+      group.classList.toggle('open');
+    }
+
+    // ---------- 4. 语言切换 ----------
+    function setLanguage(lang) {
+      currentLang = lang;
+      // 更新按钮状态
+      document.getElementById('langZh').classList.toggle('active', lang === 'zh');
+      document.getElementById('langEn').classList.toggle('active', lang === 'en');
+
+      // 更新所有带 data-key 的元素
+      document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.dataset.key;
+        if (i18n[lang][key]) {
+          el.textContent = i18n[lang][key];
+        }
+      });
+
+      // 重新渲染菜单（因为分类标签和菜品名称需要切换）
+      renderMenu();
+
+      // 恢复之前选中的分类筛选（简单处理：重置为全部）
+      const activeCat = document.querySelector('.cat-btn.active');
+      if (activeCat) {
+        activeCat.classList.remove('active');
+      }
+      const allBtn = document.querySelector('.cat-btn[data-cat="all"]');
+      if (allBtn) allBtn.classList.add('active');
+      document.querySelectorAll('.menu-group').forEach(group => {
+        group.style.display = 'block';
+      });
+    }
+
+    // ---------- 5. 移动端导航 ----------
+    function toggleMobileNav() {
+      const nav = document.getElementById('navLinks');
+      nav.classList.toggle('mobile-open');
+    }
+
+    // 点击导航链接后关闭移动端菜单
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('navLinks').classList.remove('mobile-open');
+      });
+    });
+
+    // ---------- 6. 初始化 ----------
+    window.addEventListener('DOMContentLoaded', () => {
+      renderMenu();
+      // 默认中文
+      setLanguage('zh');
+    });
+  </script>
+</body>
+</html>
